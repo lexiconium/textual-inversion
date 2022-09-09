@@ -459,26 +459,26 @@ class TextualInversionDiffusionPipeline(DiffusionPipeline):
         )
 
         for batch in dataloader:
+            latent_dists = self.vae.encode(batch.pixel_values).latent_dist
+            latents: torch.Tensor = 0.18215 * latent_dists.sample().detach()
+
+            # Sample noise
+            noises = torch.randn(latents.shape, dtype=latents.dtype, device=latents.device)
+            timesteps = torch.randint(
+                len(self.scheduler),
+                size=(latents.shape[0],),
+                dtype=torch.long,
+                device=latents.device
+            )
+
+            # Add noise to the latent vectors
+            noisy_latents = self.scheduler.add_noise(latents, noises, timesteps)
+
+            # Get text embedding for conditioning
+            encoder_hidden_states = self.text_encoder(batch.input_ids).last_hidden_state
+
             with accelerator.accumulate(self.text_encoder):
                 optimizer.zero_grad()
-
-                latent_dists = self.vae.encode(batch.pixel_values).latent_dist
-                latents: torch.Tensor = 0.18215 * latent_dists.sample().detach()
-
-                # Sample noise
-                noises = torch.randn(latents.shape, dtype=latents.dtype, device=latents.device)
-                timesteps = torch.randint(
-                    len(self.scheduler),
-                    size=(latents.shape[0],),
-                    dtype=torch.long,
-                    device=latents.device
-                )
-
-                # Add noise to the latent vectors
-                noisy_latents = self.scheduler.add_noise(latents, noises, timesteps)
-
-                # Get text embedding for conditioning
-                encoder_hidden_states = self.text_encoder(batch.input_ids).last_hidden_state
 
                 # Predict noise residual
                 noise_preds = self.unet(noisy_latents, timesteps, encoder_hidden_states).sample
