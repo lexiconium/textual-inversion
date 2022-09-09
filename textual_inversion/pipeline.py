@@ -196,15 +196,13 @@ class TextualInversionDiffusionPipeline(DiffusionPipeline):
                 The output format of the generate image. Choose between
                 [PIL](https://pillow.readthedocs.io/en/stable/): `PIL.Image.Image` or `nd.array`.
             return_dict (`bool`, *optional*, defaults to `True`):
-                Whether or not to return a [`~pipelines.stable_diffusion.StableDiffusionPipelineOutput`] instead of a
+                Whether or not to return a [`TextualInversionDiffusionPipelineOutput`] instead of a
                 plain tuple.
 
         Returns:
-            [`~textual_inversion.TextualInversionDiffusionPipelineOutput`] or `tuple`:
-            [`~textual_inversion.TextualInversionDiffusionPipelineOutput`] if `return_dict` is True, otherwise a `tuple.
-            When returning a tuple, the first element is a list with the generated images, and the second element is a
-            list of `bool`s denoting whether the corresponding generated image likely represents "not-safe-for-work"
-            (nsfw) content, according to the `safety_checker`.
+            [`TextualInversionDiffusionPipelineOutput`] or `tuple`:
+            [`TextualInversionDiffusionPipelineOutput`] if `return_dict` is True, otherwise a `tuple.
+            When returning a tuple, it is a list with the generated images.
         """
 
         if "torch_device" in kwargs:
