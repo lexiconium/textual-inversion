@@ -1,6 +1,3 @@
 # textual-inversion
 
-
-```shell
-pip install git+https://github.com/lexiconium/textual-inversion/tree/main
-```
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lexiconium/textual-inversion/blob/main/conceptualizer.ipynb)

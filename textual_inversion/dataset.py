@@ -84,7 +84,7 @@ class TextualInversionDataset(Dataset):
         transforms: torchvision.transforms.Compose,
         tokenizer: CLIPTokenizer,
         placeholder_token: str,
-        learn_type: str
+        learnable_property: str
     ):
         self.image_paths = [
             os.path.join(data_dir, filename)
@@ -105,13 +105,13 @@ class TextualInversionDataset(Dataset):
             return_tensors="pt"
         )
 
-        self.templates = IMAGENET_TEMPLATES_SMALL[learn_type]
+        self.templates = IMAGENET_TEMPLATES_SMALL[learnable_property]
 
         self.data_dir = data_dir
         self.transforms = transforms
         self.tokenizer = tokenizer
         self.placeholder_token = placeholder_token
-        self.learn_type = learn_type
+        self.learn_type = learnable_property
 
     def __len__(self):
         return len(self.image_paths)
